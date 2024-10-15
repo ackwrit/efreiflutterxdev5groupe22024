@@ -20,6 +20,10 @@ class MyFirebaseHelper{
 
   }
 
+  addMusic(String uid,Map<String,dynamic> data){
+    mesMusiques.doc(uid).set(data);
+  }
+
  //inscription
   Future<MyUser>register(String email,String password) async{
     UserCredential credential = await auth.createUserWithEmailAndPassword(email:email,password:password);
@@ -45,6 +49,19 @@ Future<MyUser>getUser(String uid) async {
     DocumentSnapshot snapshot = await mesUtilisateurs.doc(uid).get();
     return MyUser.dbb(snapshot);
 }
+
+//stocker des données
+Future<String>uploadData({required String dossier,required String nomData, required Uint8List bytesData, required String uuid}) async{
+    //déposer les données
+
+  TaskSnapshot snap = await mesStorage.ref("$dossier/$uuid/$nomData").putData(bytesData);
+
+  //récupérer l'url
+  String urlData = await snap.ref.getDownloadUrl();
+  return urlData;
+
+}
+
 
 
 

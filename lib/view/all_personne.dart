@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musicefreixdevgrp22024/controller/firebase_helper.dart';
+import 'package:musicefreixdevgrp22024/model/my_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AllPersonn extends StatefulWidget {
   const AllPersonn({super.key});
@@ -11,10 +13,10 @@ class AllPersonn extends StatefulWidget {
 class _AllPersonnState extends State<AllPersonn> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
         stream: MyFirebaseHelper().mesUtilisateurs.snapshots(),
         builder: (context,snap){
-          if(ConnectionState.waiting){
+          if(ConnectionState.waiting == snap.connectionState){
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -26,7 +28,7 @@ class _AllPersonnState extends State<AllPersonn> {
               );
             }else
               {
-                List documents = snap.data();
+                List documents = snap.data!.docs;
                 return ListView.builder(
                   itemCount: documents.length,
                     itemBuilder: (context,index){
@@ -34,7 +36,7 @@ class _AllPersonnState extends State<AllPersonn> {
                      return ListTile(
                        title: Text(other.nom!),
                        subtitle: Text(other.email),
-                     )
+                     );
                     }
                 );
               }

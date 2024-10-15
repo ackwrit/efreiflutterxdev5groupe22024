@@ -4,12 +4,16 @@ import 'package:musicefreixdevgrp22024/view/my_dash_board.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:musicefreixdevgrp22024/controller/firebase_helper.dart';
+import 'package:musicefreixdevgrp22024/globale.dart';
+import 'package:musicefreixdevgrp22024/controller/MyPermissionImage.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  MyPermissionImage().init();
   runApp(const MyApp());
 }
 

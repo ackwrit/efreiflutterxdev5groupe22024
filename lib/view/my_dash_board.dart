@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musicefreixdevgrp22024/view/my_profil_page.dart';
 import 'package:musicefreixdevgrp22024/globale.dart';
 import 'package:musicefreixdevgrp22024/view/all_personne.dart';
+import 'package:musicefreixdevgrp22024/view/addMusicView.dart';
 
 
 class MyDashBoard extends StatefulWidget {
@@ -26,9 +27,19 @@ class _MyDashBoardState extends State<MyDashBoard> {
         child: const MyProfilPage(),
 
       ),
+
       appBar: AppBar(
         title: Text("Bienvenue ${monUtilisateur.email}"),
         centerTitle: true,
+          actions:[
+            IconButton(
+                icon:Icon(Icons.add),
+                onPressed:(){
+                  Navigator.push(context,MaterialPageRoute(builder:(context)=>AddMusicView()));
+
+                }
+            )
+          ]
       ),
       body: bodyPage(),
       bottomNavigationBar: BottomNavigationBar(
