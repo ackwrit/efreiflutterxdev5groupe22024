@@ -1,5 +1,9 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 class MyFirebaseHelper{
   //attributs
   final auth = FirebaseAuth.instance;
@@ -30,7 +34,7 @@ class MyFirebaseHelper{
 
 //se connecter
 connect(String email, String password) async {
-  UserCredential credential = await auth.sigInWithEmailAndPassword(email:email,password:password);
+  UserCredential credential = await auth.signInWithEmailAndPassword(email:email,password:password);
 }
 
 
