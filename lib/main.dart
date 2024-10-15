@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:musicefreixdevgrp22024/controller/my_animation.dart';
 import 'package:musicefreixdevgrp22024/view/my_dash_board.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:musicefreixdevgrp22024/controller/firebase_helper.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -158,6 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ElevatedButton(
                         child: const Text("Connexion"),
                         onPressed: (){
+                          MyFirebaseHelper().connect(mail.text, pass.text);
 
                           Navigator.push(context,MaterialPageRoute(builder: (context)=> MyDashBoard(email: mail.text,)));
                         },
@@ -167,6 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       TextButton(
                         child: const Text("Inscription"),
                         onPressed: (){
+                          MyFirebaseHelper().register(mail.text,pass.text);
 
                         },
                       ),

@@ -33,7 +33,7 @@ class MyFirebaseHelper{
 
 
 //se connecter
-connect(String email, String password) async {
+Future <MyUser>connect(String email, String password) async {
   UserCredential credential = await auth.signInWithEmailAndPassword(email:email,password:password);
 }
 
