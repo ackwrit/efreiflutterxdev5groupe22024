@@ -165,9 +165,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       ElevatedButton(
                         child: const Text("Connexion"),
                         onPressed: (){
-                          MyFirebaseHelper().connect(mail.text, pass.text);
+                          MyFirebaseHelper().connect(mail.text, pass.text).then((onValue){
+                            setState(() {
+                              monUtilisateur = onValue;
+                            });
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=> MyDashBoard()));
 
-                          Navigator.push(context,MaterialPageRoute(builder: (context)=> MyDashBoard(email: mail.text,)));
+                          }).catchError((onError){
+                            //afficher un pop up
+                          });
+
+
                         },
                       ),
 
@@ -175,7 +183,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       TextButton(
                         child: const Text("Inscription"),
                         onPressed: (){
-                          MyFirebaseHelper().register(mail.text,pass.text);
+                          MyFirebaseHelper().register(mail.text,pass.text).then((onValue){
+                            setState(() {
+                              monUtilisateur = onValue;
+                            });
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=> MyDashBoard()));
+                          }).catchError((onError){
+
+                          });
 
                         },
                       ),

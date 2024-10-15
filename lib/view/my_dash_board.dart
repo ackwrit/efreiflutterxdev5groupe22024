@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musicefreixdevgrp22024/view/my_profil_page.dart';
+import 'package:musicefreixdevgrp22024/globale.dart';
+import 'package:musicefreixdevgrp22024/view/all_personne.dart';
 
 
 class MyDashBoard extends StatefulWidget {
-  String email;
-  MyDashBoard({super.key,required this.email});
+
+  MyDashBoard({super.key,});
 
   @override
   State<MyDashBoard> createState() => _MyDashBoardState();
@@ -25,7 +27,7 @@ class _MyDashBoardState extends State<MyDashBoard> {
 
       ),
       appBar: AppBar(
-        title: Text(widget.email),
+        title: Text("Bienvenue ${monUtilisateur.email}"),
         centerTitle: true,
       ),
       body: bodyPage(),
@@ -62,7 +64,7 @@ class _MyDashBoardState extends State<MyDashBoard> {
 
   Widget bodyPage(){
     switch (tappedIcon){
-      case 0 : return const Text("Toutes les personnes");
+      case 0 : return const AllPersonn();
       case 1 : return const Text("Mes favoris");
       case 2 : return const Text("Mes paramètres");
       default: return const Text("Erreur");
