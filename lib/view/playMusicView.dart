@@ -1,207 +1,172 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:musicefreixdevgrp22024/globale.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:async';
 
 class PlayMusicView extends StatefulWidget {
-  const PlayMusicView({super.key});
+  const PlayMusicView({Key? key}) : super(key: key);
 
   @override
-  State<PlayMusicView> createState() => _PlayMusicViewState();
+  _PlayMusicViewState createState() => _PlayMusicViewState();
 }
 
 class _PlayMusicViewState extends State<PlayMusicView> {
-  //variable
-  StatutLecture lecture =  StatutLecture.stop;
   AudioPlayer audioPlayer = AudioPlayer();
   Duration positionnement = Duration(seconds: 0);
   late StreamSubscription positionStream;
   late StreamSubscription stateStream;
   Duration dureeTotal = Duration(seconds: 0);
-
-
-
   double valueSlider = 0;
   double volumeSound = 0.5;
   bool isPlaying = false;
 
-  //méthode
-  configPlayer(){
-    //définir la musique qui va être lu
-    audioPlayer.setSourceAsset("lib/music/reggae.mp3");
-    //définier ce flux
-    positionStream = audioPlayer.onPositionChanged.listen((onData){
+  void configPlayer() {
+    // Définir la musique à partir des assets
+    audioPlayer.setSourceAsset("reggae.mp3");
+
+    // Écouteur pour la position
+    positionStream = audioPlayer.onPositionChanged.listen((event) {
       setState(() {
-        positionnement = onData;
+        positionnement = event;
       });
-      audioPlayer.onDurationChanged.listen((onData){
+    });
+
+    // Écouteur pour la durée totale
+    audioPlayer.onDurationChanged.listen((event) {
+      setState(() {
+        dureeTotal = event;
+      });
+    });
+
+    // Écouteur pour l'état de lecture
+    stateStream = audioPlayer.onPlayerStateChanged.listen((event) {
+      if (event == PlayerState.playing) {
         setState(() {
-          print(onData);
-          dureeTotal = onData;
+          isPlaying = true;
         });
-      });
-
-      stateStream = audioPlayer.onPlayerStateChanged.listen((onData){
-        if(PlayerState.playing == onData){
-          setState(() async {
-            print(dureeTotal);
-            dureeTotal = await audioPlayer.getDuration() as Duration;
-            lecture = StatutLecture.play;
-          });
-        }
-        else if(onData == PlayerState.stopped){
-          setState(() async{
-            lecture = StatutLecture.stop;
-            dureeTotal = await audioPlayer.getDuration() as Duration;
-          });
-
-        }
-      });
-
+      } else if (event == PlayerState.paused || event == PlayerState.stopped) {
+        setState(() {
+          isPlaying = false;
+        });
+      }
     });
   }
 
-  //fonction lecture
-  play() async{
-    if(positionnement < dureeTotal){
-
-      await audioPlayer.play(AssetSource("lib/music/reggae.mp3"),volume:volumeSound,position: positionnement);
-    }
-    else {
-      lecture = StatutLecture.stop;
-      positionnement = Duration(seconds: 0);
-    }
-
-
+  void play() async {
+    await audioPlayer.play(AssetSource("reggae.mp3"), position: positionnement, volume: volumeSound);
+    print(positionnement);
   }
 
-  pause() async {
+  void pause() async {
     await audioPlayer.pause();
   }
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     configPlayer();
   }
 
-
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
+    audioPlayer.dispose();
+    positionStream.cancel();
+    stateStream.cancel();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(
-
+      appBar: AppBar(
+        title: Text('Lecteur Audio'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          //pochette
+          // Pochette de l'album
           AnimatedContainer(
-              duration: Duration(seconds: 2),
-            height: (!isPlaying)?150:300,
-            width : (!isPlaying)?250:450,
+            duration: Duration(seconds: 2),
             curve: Curves.easeInOut,
+            height: isPlaying ? 300 : 150,
+            width: isPlaying ? 450 : 250,
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("lib/assets/modeling.png")
-              )
+                image: AssetImage("lib/assets/modeling.png"),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
 
-
-
-          //titre de la musique
-          Text("Titre le musique"),
-
-          //artiste
+          // Informations sur la musique
+          Text("Titre de la musique"),
           Text("Artiste de la musique"),
+          Text("Type de la musique"),
 
-
-          //type de la musique
-          Text("type de la musique"),
-          Spacer(),
-
-
-
-
-
-          //Slider
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(positionnement.toString().substring(2,7)),
-              Text(dureeTotal.toString().substring(2,7)),
-            ],
+          // Slider de progression
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(positionnement.toString().split('.').first),
+                Text(dureeTotal.toString().split('.').first),
+              ],
+            ),
           ),
           Slider(
-              min: 0.0,
-              max : dureeTotal.inSeconds.toDouble(),
-              value: valueSlider,
-              onChanged: (value){
-                setState(() {
-                  valueSlider = value;
-                });
-              }
+            min: 0.0,
+            max: dureeTotal.inSeconds.toDouble(),
+            value: positionnement.inSeconds.toDouble(),
+            onChanged: (value) {
+              setState(() {
+                //valueSlider = value;
+                positionnement = Duration(seconds: value.toInt());
+              });
+            },
           ),
 
-
-          //Icone pour la lecture,pause , avance rapide , retour en arrière
+          // Boutons de contrôle
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                  onPressed: (){
-                    print("retour en arrière");
-                  },
-                  icon: FaIcon(FontAwesomeIcons.backward)
+                onPressed: () {
+                  print("retour en arrière");
+                },
+                icon: FaIcon(FontAwesomeIcons.backward),
+              ),
+
+              IconButton(
+                onPressed: () {
+
+                  (isPlaying)?pause():play();
+                },
+                icon: FaIcon(isPlaying ? FontAwesomeIcons.pause : FontAwesomeIcons.play),
               ),
               IconButton(
-                  onPressed: (){
-                    print("pause");
-                    pause();
-                  },
-                  icon: FaIcon(FontAwesomeIcons.pause)
-              ),
-              IconButton(
-                  onPressed: (){
-                    print("lecture");
-                    play();
-                  },
-                  icon: FaIcon(FontAwesomeIcons.play)
-              ),
-              IconButton(
-                  onPressed: (){
-                    print("on avance");
-                  },
-                  icon: FaIcon(FontAwesomeIcons.forward)
+                onPressed: () {
+                  print("on avance");
+                },
+                icon: FaIcon(FontAwesomeIcons.forward),
               ),
             ],
           ),
 
-
-          //slider pour le volume
+          // Slider de volume
           Slider(
-              min: 0.0,
-              max : 1,
-              value: volumeSound,
-              onChanged: (value){
-                setState(() {
-                  volumeSound = value;
-                });
-              }
+            min: 0.0,
+            max: 1.0,
+            value: volumeSound,
+            onChanged: (value) {
+              setState(() {
+                volumeSound = value;
+              });
+            },
           ),
-
-
-
         ],
       ),
-
     );
   }
 }
+
