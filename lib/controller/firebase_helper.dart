@@ -21,6 +21,13 @@ class MyFirebaseHelper{
 
   }
 
+  updateUser(String uid,Map<String,dynamic> data){
+    mesUtilisateurs.doc(uid).update(data);
+
+  }
+
+
+
   addMusic(String uid,Map<String,dynamic> data){
     mesMusiques.doc(uid).set(data);
   }

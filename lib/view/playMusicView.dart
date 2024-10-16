@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:async';
 import 'package:musicefreixdevgrp22024/model/my_music.dart';
+import 'package:musicefreixdevgrp22024/globale.dart';
+import 'package:musicefreixdevgrp22024/controller/firebase_helper.dart';
 class PlayMusicView extends StatefulWidget {
   MyMusic music;
   PlayMusicView({Key? key, required this.music}) : super(key: key);
@@ -23,7 +25,7 @@ class _PlayMusicViewState extends State<PlayMusicView> {
 
   void configPlayer() {
     // Définir la musique à partir des assets
-    audioPlayer.setSource(UrlSource(widget.music.link));
+    audioPlayer.setSource(UrlSource (widget.music.link));
 
     // Écouteur pour la position
     positionStream = audioPlayer.onPositionChanged.listen((event) {
@@ -81,6 +83,22 @@ class _PlayMusicViewState extends State<PlayMusicView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Lecteur Audio'),
+        actions: [
+          IconButton(
+              onPressed: (){
+                if(!monUtilisateur.favoris.contains(widget.music.uid)){
+                  monUtilisateur.favoris.add(widget.music.uid);
+                  Map<String,dynamic> map = {
+                    "FAVORIS":monUtilisateur.favoris,
+                  }
+                  MyFirebaseHelper().updateUser(monUtilisateur.uid,map);
+                }
+
+              },
+              color: monUtilisateur.favoris.contains(widget.music.uid)?Colors.red: Colors.transparent,
+              icon:Icon(Icons.favorite)
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
