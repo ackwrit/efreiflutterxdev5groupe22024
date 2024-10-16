@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:musicefreixdevgrp22024/globale.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'dart:async';
 
 class PlayMusicView extends StatefulWidget {
   const PlayMusicView({super.key});
@@ -9,8 +12,88 @@ class PlayMusicView extends StatefulWidget {
 }
 
 class _PlayMusicViewState extends State<PlayMusicView> {
+  //variable
+  StatutLecture lecture =  StatutLecture.stop;
+  AudioPlayer audioPlayer = AudioPlayer();
+  Duration positionnement = Duration(seconds: 0);
+  late StreamSubscription positionStream;
+  late StreamSubscription stateStream;
+  Duration dureeTotal = Duration(seconds: 0);
+
+
+
   double valueSlider = 0;
-  double volumeSound = 0;
+  double volumeSound = 0.5;
+  bool isPlaying = false;
+
+  //méthode
+  configPlayer(){
+    //définir la musique qui va être lu
+    audioPlayer.setSourceAsset("lib/music/reggae.mp3");
+    //définier ce flux
+    positionStream = audioPlayer.onPositionChanged.listen((onData){
+      setState(() {
+        positionnement = onData;
+      });
+      audioPlayer.onDurationChanged.listen((onData){
+        setState(() {
+          print(onData);
+          dureeTotal = onData;
+        });
+      });
+
+      stateStream = audioPlayer.onPlayerStateChanged.listen((onData){
+        if(PlayerState.playing == onData){
+          setState(() async {
+            print(dureeTotal);
+            dureeTotal = await audioPlayer.getDuration() as Duration;
+            lecture = StatutLecture.play;
+          });
+        }
+        else if(onData == PlayerState.stopped){
+          setState(() async{
+            lecture = StatutLecture.stop;
+            dureeTotal = await audioPlayer.getDuration() as Duration;
+          });
+
+        }
+      });
+
+    });
+  }
+
+  //fonction lecture
+  play() async{
+    if(positionnement < dureeTotal){
+
+      await audioPlayer.play(AssetSource("lib/music/reggae.mp3"),volume:volumeSound,position: positionnement);
+    }
+    else {
+      lecture = StatutLecture.stop;
+      positionnement = Duration(seconds: 0);
+    }
+
+
+  }
+
+  pause() async {
+    await audioPlayer.pause();
+  }
+
+
+  @override
+  void initState(){
+    super.initState();
+    configPlayer();
+  }
+
+
+  @override
+  void dispose(){
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,12 +105,12 @@ class _PlayMusicViewState extends State<PlayMusicView> {
           //pochette
           AnimatedContainer(
               duration: Duration(seconds: 2),
-            //height: (quand la lecture se en pause ou non )?150:300,
-            //width : (quand la lecture se en pause ou non )?250:450,
+            height: (!isPlaying)?150:300,
+            width : (!isPlaying)?250:450,
             curve: Curves.easeInOut,
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("/lib/assets/modeling.png")
+                  image: AssetImage("lib/assets/modeling.png")
               )
             ),
           ),
@@ -53,13 +136,13 @@ class _PlayMusicViewState extends State<PlayMusicView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("afficher le positionnement de la musique en minutes"),
-              Text("afficher la durée total de la musique en minutes"),
+              Text(positionnement.toString().substring(2,7)),
+              Text(dureeTotal.toString().substring(2,7)),
             ],
           ),
           Slider(
               min: 0.0,
-              //max : durée de notre musique
+              max : dureeTotal.inSeconds.toDouble(),
               value: valueSlider,
               onChanged: (value){
                 setState(() {
@@ -81,12 +164,14 @@ class _PlayMusicViewState extends State<PlayMusicView> {
               IconButton(
                   onPressed: (){
                     print("pause");
+                    pause();
                   },
                   icon: FaIcon(FontAwesomeIcons.pause)
               ),
               IconButton(
                   onPressed: (){
                     print("lecture");
+                    play();
                   },
                   icon: FaIcon(FontAwesomeIcons.play)
               ),
