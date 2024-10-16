@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:async';
-
+import 'package:musicefreixdevgrp22024/model/my_music.dart';
 class PlayMusicView extends StatefulWidget {
-  const PlayMusicView({Key? key}) : super(key: key);
+  MyMusic music;
+  PlayMusicView({Key? key, required this.music}) : super(key: key);
 
   @override
   _PlayMusicViewState createState() => _PlayMusicViewState();
@@ -22,7 +23,7 @@ class _PlayMusicViewState extends State<PlayMusicView> {
 
   void configPlayer() {
     // Définir la musique à partir des assets
-    audioPlayer.setSourceAsset("vibe.mp3");
+    audioPlayer.setSource(UrlSource(widget.music.link));
 
     // Écouteur pour la position
     positionStream = audioPlayer.onPositionChanged.listen((event) {
@@ -53,7 +54,7 @@ class _PlayMusicViewState extends State<PlayMusicView> {
   }
 
   void play() async {
-    await audioPlayer.play(AssetSource("vibe.mp3"), position: positionnement, volume: volumeSound);
+    await audioPlayer.play(UrlSource(widget.music.link),position: positionnement,volume: volumeSound);
     print(positionnement);
   }
 
@@ -92,15 +93,15 @@ class _PlayMusicViewState extends State<PlayMusicView> {
             width: isPlaying ? 450 : 250,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("lib/assets/modeling.png"),
+                image: NetworkImage(widget.music.pochette),
                 fit: BoxFit.cover,
               ),
             ),
           ),
 
           // Informations sur la musique
-          Text("Titre de la musique"),
-          Text("Artiste de la musique"),
+          Text(widget.music.nom),
+          Text(widget.music.auteur),
           Text("Type de la musique"),
 
           // Slider de progression

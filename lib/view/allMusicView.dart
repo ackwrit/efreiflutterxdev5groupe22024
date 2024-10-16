@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musicefreixdevgrp22024/controller/firebase_helper.dart';
 import 'package:musicefreixdevgrp22024/model/my_music.dart';
 import 'package:musicefreixdevgrp22024/view/playMusicView.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Allmusicview extends StatefulWidget {
   const Allmusicview({super.key});
@@ -35,7 +36,7 @@ class _AllmusicviewState extends State<Allmusicview> {
                 MyMusic lesmusics = MyMusic.dbb(documents[index]);
                 return GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PlayMusicView()))
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PlayMusicView(music:lesmusics)));
                   },
                   child: Container(
                     child: Text(lesmusics.nom,
