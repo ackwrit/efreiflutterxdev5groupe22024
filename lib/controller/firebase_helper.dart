@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:musicefreixdevgrp22024/model/my_user.dart';
+import 'dart:typed_data';
 
 class MyFirebaseHelper{
   //attributs
@@ -54,10 +55,10 @@ Future<MyUser>getUser(String uid) async {
 Future<String>uploadData({required String dossier,required String nomData, required Uint8List bytesData, required String uuid}) async{
     //déposer les données
 
-  TaskSnapshot snap = await mesStorage.ref("$dossier/$uuid/$nomData").putData(bytesData);
+  TaskSnapshot snap = await mesStorages.ref("$dossier/$uuid/$nomData").putData(bytesData);
 
   //récupérer l'url
-  String urlData = await snap.ref.getDownloadUrl();
+  String urlData = await snap.ref.getDownloadURL();
   return urlData;
 
 }
