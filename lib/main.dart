@@ -7,6 +7,7 @@ import 'package:musicefreixdevgrp22024/controller/firebase_helper.dart';
 import 'package:musicefreixdevgrp22024/globale.dart';
 import 'package:musicefreixdevgrp22024/controller/MyPermissionImage.dart';
 import 'package:musicefreixdevgrp22024/view/playMusicView.dart';
+import 'package:musicefreixdevgrp22024/view/addMusicView.dart';
 
 
 void main() async {
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: PlayMusicView(),
+      home: MyHomePage(title: "cocuou"),
       debugShowCheckedModeBanner: false,
 
     );

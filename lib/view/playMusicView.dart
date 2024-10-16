@@ -22,7 +22,7 @@ class _PlayMusicViewState extends State<PlayMusicView> {
 
   void configPlayer() {
     // Définir la musique à partir des assets
-    audioPlayer.setSourceAsset("reggae.mp3");
+    audioPlayer.setSourceAsset("vibe.mp3");
 
     // Écouteur pour la position
     positionStream = audioPlayer.onPositionChanged.listen((event) {
@@ -53,7 +53,7 @@ class _PlayMusicViewState extends State<PlayMusicView> {
   }
 
   void play() async {
-    await audioPlayer.play(AssetSource("reggae.mp3"), position: positionnement, volume: volumeSound);
+    await audioPlayer.play(AssetSource("vibe.mp3"), position: positionnement, volume: volumeSound);
     print(positionnement);
   }
 
