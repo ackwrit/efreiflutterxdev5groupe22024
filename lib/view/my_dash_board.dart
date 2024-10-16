@@ -4,6 +4,7 @@ import 'package:musicefreixdevgrp22024/view/my_profil_page.dart';
 import 'package:musicefreixdevgrp22024/globale.dart';
 import 'package:musicefreixdevgrp22024/view/all_personne.dart';
 import 'package:musicefreixdevgrp22024/view/addMusicView.dart';
+import 'package:musicefreixdevgrp22024/view/allMusicView.dart';
 
 
 class MyDashBoard extends StatefulWidget {
@@ -75,7 +76,7 @@ class _MyDashBoardState extends State<MyDashBoard> {
 
   Widget bodyPage(){
     switch (tappedIcon){
-      case 0 : return const AllPersonn();
+      case 0 : return const Allmusicview();
       case 1 : return const Text("Mes favoris");
       case 2 : return const Text("Mes paramètres");
       default: return const Text("Erreur");

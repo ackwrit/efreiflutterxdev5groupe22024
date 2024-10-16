@@ -155,6 +155,7 @@ class _AddMusicViewState extends State<AddMusicView> {
               String uid = randomAlphaNumeric(20);
 
               MyFirebaseHelper().addMusic(uid,map);
+              Navigator.pop(context);
               }
 
 
