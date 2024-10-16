@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:musicefreixdevgrp22024/controller/firebase_helper.dart';
 import 'package:random_string/random_string.dart';
 import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
+import 'package:musicefreixdevgrp22024/globale.dart';
+
 
 
 
@@ -25,8 +28,9 @@ class _AddMusicViewState extends State<AddMusicView> {
 
   //méthode
   //uploader l'image
-  UploadPicture(){
-    FilePickerResult? resultat = await FilePicker.platorm.pickFiles(
+  UploadPicture() async {
+
+    FilePickerResult? resultat = await FilePicker.platform.pickFiles(
       withData : true,
       type : FileType.image
     );
@@ -44,7 +48,7 @@ class _AddMusicViewState extends State<AddMusicView> {
       builder:(context){
         return AlertDialog(
           title: Text("Souhaitez enregistrer cette image ?"),
-          content : Image.memory(bytesImage!),
+          content : Image.memory(byteImage!),
           actions : [
             TextButton(
               onPressed : (){
@@ -52,11 +56,11 @@ class _AddMusicViewState extends State<AddMusicView> {
                 Navigator.pop(context);
 
               },
-              Text("Annuler")
+              child : Text("Annuler")
             ),
             TextButton(
                 onPressed : (){
-                  MyFirebaseHelper().uploadData(dossier:"IMAGES",uuid:monUtilusateur.uid,nameData : nameImage!,byteData:bytesImage!).then((onValue){
+                  MyFirebaseHelper().uploadData(dossier:"IMAGES",uuid:monUtilisateur.uid,nomData : nameImage!,bytesData:byteImage!).then((onValue){
                     lienImage = onValue;
                   });
 
@@ -66,7 +70,7 @@ class _AddMusicViewState extends State<AddMusicView> {
                   Navigator.pop(context);
 
                 },
-                Text("valider")
+                child : Text("valider")
             ),
 
           ]
@@ -108,8 +112,8 @@ class _AddMusicViewState extends State<AddMusicView> {
               Map<String,dynamic> map = {
                 "AUTEUR":auteur.text,
                 "NOM":nom.text,
-                "LIEN": lienImage;
-              }
+                "LIEN": lienImage
+              };
               String uid = randomAlphaNumeric(20);
 
               MyFirebaseHelper().addMusic(uid,map);

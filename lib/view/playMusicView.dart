@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PlayMusicView extends StatefulWidget {
   const PlayMusicView({super.key});
@@ -34,14 +35,15 @@ class _PlayMusicViewState extends State<PlayMusicView> {
 
 
           //titre de la musique
-          Text("Titre le musique")
+          Text("Titre le musique"),
 
           //artiste
-          Text("Artiste de la musique")
+          Text("Artiste de la musique"),
 
 
           //type de la musique
-          Text("type de la musique")
+          Text("type de la musique"),
+          Spacer(),
 
 
 
@@ -54,7 +56,7 @@ class _PlayMusicViewState extends State<PlayMusicView> {
               Text("afficher le positionnement de la musique en minutes"),
               Text("afficher la durée total de la musique en minutes"),
             ],
-          )
+          ),
           Slider(
               min: 0.0,
               //max : durée de notre musique
@@ -72,36 +74,36 @@ class _PlayMusicViewState extends State<PlayMusicView> {
             children: [
               IconButton(
                   onPressed: (){
-                    print("retour en arrière")
+                    print("retour en arrière");
                   },
                   icon: FaIcon(FontAwesomeIcons.backward)
               ),
               IconButton(
                   onPressed: (){
-                    print("pause")
+                    print("pause");
                   },
                   icon: FaIcon(FontAwesomeIcons.pause)
               ),
               IconButton(
                   onPressed: (){
-                    print("lecture")
+                    print("lecture");
                   },
                   icon: FaIcon(FontAwesomeIcons.play)
               ),
               IconButton(
                   onPressed: (){
-                    print("on avance")
+                    print("on avance");
                   },
                   icon: FaIcon(FontAwesomeIcons.forward)
               ),
             ],
-          )
+          ),
 
 
           //slider pour le volume
           Slider(
               min: 0.0,
-              max : 1
+              max : 1,
               value: volumeSound,
               onChanged: (value){
                 setState(() {
