@@ -8,6 +8,9 @@ import 'package:musicefreixdevgrp22024/globale.dart';
 import 'package:musicefreixdevgrp22024/controller/MyPermissionImage.dart';
 import 'package:musicefreixdevgrp22024/view/playMusicView.dart';
 import 'package:musicefreixdevgrp22024/view/addMusicView.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:stripe_ios/stripe_ios.dart';
+import 'package:stripe_android/stripe_android.dart';
 
 
 void main() async {
@@ -16,6 +19,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   MyPermissionImage().init();
+  Stripe.publishableKey("pk_test_51GQ8hTDVXOXIy9UxpbYscBnuiq9FTW63gCk5agdRp2JOjym1NvC03WVaEBdj6wwFkJzAeCit9ZA77sBTeQHaI9rI00fsdMSCog");
+
   runApp(const MyApp());
 }
 

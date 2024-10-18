@@ -35,9 +35,9 @@ class _MyFavoriteViewState extends State<MyFavoriteView> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
                     itemBuilder: (context,index){
                       MyMusic other = MyMusic.dbb(documents[index]);
-                      print("avant le if ${other.uid}");
+
                       if(monUtilisateur.favoris.contains(other.uid)){
-                        print("dans le if ${other.uid}");
+
                         return GestureDetector(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>PlayMusicView(music: other)));
