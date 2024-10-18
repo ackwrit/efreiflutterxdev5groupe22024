@@ -25,7 +25,7 @@ class _PlayMusicViewState extends State<PlayMusicView> {
 
   void configPlayer() {
     // Définir la musique à partir des assets
-    audioPlayer.setSource(UrlSource (widget.music.link));
+    audioPlayer.setSourceUrl(widget.music.link);
 
     // Écouteur pour la position
     positionStream = audioPlayer.onPositionChanged.listen((event) {
@@ -56,8 +56,14 @@ class _PlayMusicViewState extends State<PlayMusicView> {
   }
 
   void play() async {
-    await audioPlayer.play(UrlSource(widget.music.link),position: positionnement,volume: volumeSound);
-    print(positionnement);
+    try {
+      await audioPlayer.play(UrlSource(widget.music.link),position: positionnement,volume: volumeSound);
+      print(positionnement);
+    }
+    catch(e){
+      print("erreur de la lecture :$e");
+    }
+
   }
 
   void pause() async {
@@ -90,12 +96,19 @@ class _PlayMusicViewState extends State<PlayMusicView> {
                   monUtilisateur.favoris.add(widget.music.uid);
                   Map<String,dynamic> map = {
                     "FAVORIS":monUtilisateur.favoris,
-                  }
+                  };
                   MyFirebaseHelper().updateUser(monUtilisateur.uid,map);
+                }
+                else {
+                  monUtilisateur.favoris.remove(widget.music.uid);
+                  Map<String,dynamic> map = {
+                    "FAVORIS":monUtilisateur.favoris,
+                  };
+                  MyFirebaseHelper().updateUser(monUtilisateur.uid, map);
                 }
 
               },
-              color: monUtilisateur.favoris.contains(widget.music.uid)?Colors.red: Colors.transparent,
+              color: monUtilisateur.favoris.contains(widget.music.uid)?Colors.red: Colors.grey,
               icon:Icon(Icons.favorite)
           ),
         ],

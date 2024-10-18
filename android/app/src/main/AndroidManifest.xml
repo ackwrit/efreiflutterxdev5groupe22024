@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.EXTERNAL_READ_STORAG"/>
     <application
         android:label="musicefreixdevgrp22024"
         android:name="${applicationName}"
